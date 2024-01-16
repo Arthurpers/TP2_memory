@@ -1,7 +1,7 @@
 import subprocess
 
 file_sizes = [100,1024] #Mo
-block_sizes =[1, 2, 4, 8, 16, 32, 64, 128, 256, 512] #Ko
+block_sizes =[1, 2, 4] #Ko
 
 times = []
 througpouts = []
