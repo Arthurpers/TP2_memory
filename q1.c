@@ -37,13 +37,16 @@ int main(int argc, char *argv[])
   }
 
   struct timeval start, end;
-
-  gettimeofday(&start, NULL);
+  double elapsed_time = 0;
 
   for (size_t i = 0; i < taille_fichier / taille_bloc; ++i)
   {
     generate_random_data(buffer, taille_bloc);
+    gettimeofday(&start, NULL);
     ssize_t written_bytes = write(fd, buffer, taille_bloc);
+    gettimeofday(&end, NULL);
+
+    elapsed_time += (end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec) / 1e6;
 
     if (written_bytes == -1)
     {
@@ -54,16 +57,13 @@ int main(int argc, char *argv[])
     }
   }
 
-  gettimeofday(&end, NULL);
-
   close(fd);
   free(buffer);
 
-  double elapsed_time = (end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec) / 1e6;
   double throughput = (double)taille_fichier / (1024 * 1024) / elapsed_time; // Mo/s
 
-  printf("Durée d'écriture: %.6f secondes\n", elapsed_time);
-  printf("Débit d'écriture: %.2f Mo/s\n", throughput);
+  printf("%.6f\n", elapsed_time);
+  printf("%.2f\n", throughput);
 
   return EXIT_SUCCESS;
 }
