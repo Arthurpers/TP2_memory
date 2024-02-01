@@ -28,14 +28,14 @@ A présent, on souhaite utiliser le *Page cache* de Linux pour mesurer les perfo
 
 Pour cela, on annule les effets de cache (au niveau système) pour les écritures, en ajoutant les flags `__O_DIRECT` et `O_SYNC` à l'ouverture du fichier.
 
-Ces drapeaux permettent
+Ces drapeaux permettent:
 
-O_DIRECT
-The O_DIRECT flag may impose alignment restrictions on the length and address of user-space buffers and the file offset of I/Os.
-
-In Linux alignment restrictions vary by filesystem and kernel version and might be absent entirely.
-
-However there is currently no filesystem-independent  interface  for an application to discover these restrictions for a given file or filesystem.  Some filesystems provide their own interfaces for doing so, for example the XFS_IOC_DIOINFO operation in xfsctl(3).
+- `O_SYNC`
+  - The file is opened for synchronous I/O.  Any write(2) requests on the resulting file descriptor will block the calling process until the data has been physically written to the underlying hardware.
+- `__O_DIRECT`
+  - The `O_DIRECT` flag may impose alignment restrictions on the length and address of user-space buffers and the file offset of I/Os.
+  - In Linux alignment restrictions vary by filesystem and kernel version and might be absent entirely.
+  - However there is currently no filesystem-independent  interface  for an application to discover these restrictions for a given file or filesystem.  Some filesystems provide their own interfaces for doing so, for example the XFS_IOC_DIOINFO operation in xfsctl(3).
 
 Pour purger le *page cache*, exécuter la commande suivante:
 
@@ -46,8 +46,42 @@ sync; echo 1 > /proc/sys/vm/drop_caches
 > [!WARNING]
 > Penser à purger le *page cache* avant chaque mesure.
 
+#### Analyse
+
+Les courbes pour cette analyse se trouve dans le dossier `q3/`.
+
+<!-- TODO: analyser les courbes -->
+
 ## Exercice 2 - Débit des lectures et écritures
 
+Ici, on va reprendre l'exercice précédent afin de pouvoir mesurer:
 
+- les débits **lectures** et **écritures**
+- avec un mode d'accès **séquentiel** ou **aléatoire**.
+
+Les courbes affichent chaque opération possible:
+
+- lecture séquentielle
+- lecture aléatoire
+- écriture séquentielle
+- écriture aléatoire
+
+> [!IMPORTANT]
+> Chaque opération est réalisée avec un fichier de 1Go.
+> Avec le *page cache* est purgé avant chaque mesure.
+
+### Analyse
+<!-- TODO: add analysis -->
 
 ## Exercice 3 - Efficacité du préchargement du *Page Cache*
+
+### 1. Accès en lecture séquentielle
+
+<!-- TODO -->
+
+### 2. Accès en lecture aléatoire
+
+<!-- TODO -->
+
+### 3. Détection du préchargement
+<!-- TODO -->
