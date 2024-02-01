@@ -37,6 +37,17 @@ In Linux alignment restrictions vary by filesystem and kernel version and might 
 
 However there is currently no filesystem-independent  interface  for an application to discover these restrictions for a given file or filesystem.  Some filesystems provide their own interfaces for doing so, for example the XFS_IOC_DIOINFO operation in xfsctl(3).
 
+Pour purger le *page cache*, exécuter la commande suivante:
+
+```bash
+sync; echo 1 > /proc/sys/vm/drop_caches
+```
+
+> [!WARNING]
+> Penser à purger le *page cache* avant chaque mesure.
+
 ## Exercice 2 - Débit des lectures et écritures
+
+
 
 ## Exercice 3 - Efficacité du préchargement du *Page Cache*
