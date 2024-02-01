@@ -1,5 +1,3 @@
-output.txt
-
 # File created using '.gitignore Generator' for Visual Studio Code: https://bit.ly/vscode-gig
 # Created by https://www.toptal.com/developers/gitignore/api/c,python,venv
 # Edit at https://www.toptal.com/developers/gitignore?templates=c,python,venv
@@ -244,4 +242,4 @@ pip-selfcheck.json
 # End of https://www.toptal.com/developers/gitignore/api/c,python,venv
 
 # Custom rules (everything added below won't be overriden by 'Generate .gitignore File' if you use 'Update' option)
-
+output.txt
