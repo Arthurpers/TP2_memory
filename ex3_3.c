@@ -13,10 +13,8 @@ void generate_random_data(char *buffer, size_t size) {
 }
 
 int main(int argc, char *argv[]) {
-  if (argc != 4) {
-    fprintf(stderr,
-            "usage: %s <taille_fichier> (Mo) <taille_bloc> (Ko) <temps_mort> "
-            "(us)\n",
+  if (argc != 3) {
+    fprintf(stderr, "usage: %s <taille_fichier> (Mo) <taille_bloc> (Ko)\n",
             argv[0]);
     return EXIT_FAILURE;
   }
@@ -59,7 +57,16 @@ int main(int argc, char *argv[]) {
   }
 
   // seq read
+  int fd_step[] = {4, 16, 64, 256, 1024, 16024};
   for (size_t i = 0; i < taille_fichier / taille_bloc; ++i) {
+    // offset the file descriptor by step
+    off_t offset = fd_step[i % 6] * 1024;
+    if (lseek(fd, offset, SEEK_SET) == -1) {
+      perror("Error seeking file");
+      free(buffer);
+      close(fd);
+      return EXIT_FAILURE;
+    }
     gettimeofday(&start, NULL);
     ssize_t read_bytes = read(fd, buffer, taille_bloc);
     gettimeofday(&end, NULL);
@@ -73,33 +80,6 @@ int main(int argc, char *argv[]) {
       close(fd);
       return EXIT_FAILURE;
     }
-    usleep(atoi(argv[3]));
-  }
-
-  // random read
-  for (size_t i = 0; i < taille_fichier / taille_bloc; ++i) {
-    // Modifiy fd position randomly
-    off_t offset = rand() % (taille_fichier - taille_bloc);
-    if (lseek(fd, offset, SEEK_SET) == -1) {
-      perror("Error seeking file");
-      free(buffer);
-      close(fd);
-      return EXIT_FAILURE;
-    }
-    gettimeofday(&start, NULL);
-    ssize_t read_bytes = read(fd, buffer, taille_bloc);
-    gettimeofday(&end, NULL);
-
-    elapsed_time_rand_read +=
-        (end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec) / 1e6;
-
-    if (read_bytes == -1) {
-      perror("Error reading from file");
-      free(buffer);
-      close(fd);
-      return EXIT_FAILURE;
-    }
-    usleep(atoi(argv[3]));
   }
 
   close(fd);
@@ -107,11 +87,8 @@ int main(int argc, char *argv[]) {
 
   double throughput_seq_read =
       (double)taille_fichier / (1024 * 1024) / elapsed_time_seq_read; // Mo/s
-  double throughput_rand_read =
-      (double)taille_fichier / (1024 * 1024) / elapsed_time_rand_read; // Mo/s
 
   printf("%.2f\n", throughput_seq_read);
-  printf("%.2f\n", throughput_rand_read);
 
   return EXIT_SUCCESS;
 }
