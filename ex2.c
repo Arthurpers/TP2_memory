@@ -92,7 +92,6 @@ int main(int argc, char *argv[])
   // seq read
   for (size_t i = 0; i < taille_fichier / taille_bloc; ++i)
   {
-    generate_random_data(buffer, taille_bloc);
     gettimeofday(&start, NULL);
     ssize_t read_bytes = read(fd, buffer, taille_bloc);
     gettimeofday(&end, NULL);
@@ -120,7 +119,6 @@ int main(int argc, char *argv[])
       close(fd);
       return EXIT_FAILURE;
     }
-    generate_random_data(buffer, taille_bloc);
     gettimeofday(&start, NULL);
     ssize_t read_bytes = read(fd, buffer, taille_bloc);
     gettimeofday(&end, NULL);
