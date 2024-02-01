@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
 
   char *buffer = (char *)malloc(taille_bloc);
 
-  int fd = open("output.txt", O_WRONLY | O_CREAT | O_TRUNC, 0666);
+  int fd = open("output.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 
   if (fd == -1)
   {
